@@ -1,0 +1,12 @@
+groups:
+  - name: example_alert
+    rules:
+      - alert: HighHttpRequestDuration
+        expr: http_request_duration_seconds{status_code="200"} > 1  # Adjust the threshold as needed
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP request duration detected"
+          description: "HTTP request duration is above 1 second for the last 5 minutes."
+

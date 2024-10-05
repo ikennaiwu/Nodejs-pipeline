@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-app
+  labels:
+    app: nodejs-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-app
+  template:
+    metadata:
+      labels:
+        app: nodejs-app
+    spec:
+      imagePullSecrets:
+        - name: regcred 
+      containers:
+      - name: nodejs-app
+        image: piusiyke/nodejs-prometheus-app  # Replace with your actual image
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-app
+spec:
+  type: NodePort  # Change to LoadBalancer if you want an external IP
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30000  # Change to your preferred port
+  selector:
+    app: nodejs-app
